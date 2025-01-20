@@ -28,9 +28,9 @@ with open('input_lookup_table.csv', 'r') as input_lookup_file, open('input_log_f
 
         if protocol in protocol_map:
             protocol = protocol_map.get(protocol)
-            port_protocol_counts[(dstport,protocol)] += 1
+            port_protocol_counts[(dstport,protocol.lower())] += 1
 
-        if (dstport,protocol) in port_protocol_map:
+        if (dstport,protocol.lower()) in port_protocol_map:
             tag = port_protocol_map[(dstport,protocol)]
             tag_counts[tag] += 1
         else:
