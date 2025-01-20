@@ -9,6 +9,11 @@ with open('input_lookup_table.csv', 'r') as input_lookup_file, open('input_log_f
 
     port_protocol_map = {}
 
+    protocol_map = {
+        '6' : 'tcp',
+        '17' : 'udp'
+    }
+
     tag_counts = defaultdict(int)
     port_protocol_counts = defaultdict(int)
 
@@ -21,8 +26,8 @@ with open('input_lookup_table.csv', 'r') as input_lookup_file, open('input_log_f
         dstport = data[6]
         protocol = data[7]
 
-        if protocol == '6':
-            protocol = 'tcp'
+        if protocol in protocol_map:
+            protocol = protocol_map.get(protocol)
             port_protocol_counts[(dstport,protocol)] += 1
 
         if (dstport,protocol) in port_protocol_map:
@@ -33,20 +38,19 @@ with open('input_lookup_table.csv', 'r') as input_lookup_file, open('input_log_f
 
     output_file = open('output.txt', 'w')
 
+    # write tag counts
     output_file.write('Tag Counts:\n')
     output_file.write('Tag, Count\n')
-
+    
     for key,val in tag_counts.items():
         output_file.write(key + ', ' + str(val) + '\n')
 
+    # write port-protocol counts
     output_file.write('Port/Protocol Combination Counts:\n')
     output_file.write('Port, Protocol, Count\n')
-
+    
     for key,val in port_protocol_counts.items():
         port, protocol = key
         output_file.write(key[0] + ', ' + key[1] + ', ' + str(val) + '\n')
 
     output_file.close()
-
-    # print(tag_counts.items())
-    # print(port_protocol_counts.items())
